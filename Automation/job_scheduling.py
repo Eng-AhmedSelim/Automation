@@ -1,5 +1,6 @@
 # cors 10 video
 # virtualenv - create and active
+# step One run Code pip install schedule
 # ------------------
 import schedule
 import time
