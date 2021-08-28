@@ -6,6 +6,8 @@ print(pgui.position())  # location mouse
 
 print(pgui.moveTo(650, 1056))  # move to mk
 
+pgui.screenshot('auto.png') # Fix the screenshot problem "pip install Pillow --upgrade"
+
 
 pgui.click(646, 1058)
 sleep(3)
