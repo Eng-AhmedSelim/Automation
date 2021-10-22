@@ -2,77 +2,75 @@ import time
 import schedule
 import os
 import shutil
+from win10toast import ToastNotifier
 
-user_pc = os.getlogin()
-path_publice = input('inter path: ')
-os.chdir(path_publice)
-path_pdf_doc = f'C:/Users/{user_pc}/Downloads/1-office'
-path_Pictures = f'C:/Users/{user_pc}/Downloads/2-Pictures'
-path_compressed = f'C:/Users/{user_pc}/Downloads/3-compressed'
-path_video = f'C:/Users/{user_pc}/Downloads/4-video'
-path_program = f'C:/Users/{user_pc}/Downloads/5-programs'
+toaster = ToastNotifier()
+current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
-def job():  # function File regulation
-    for file in os.listdir():
-        name_file, file_ext = os.path.splitext(file)  # Divide the file name into two parts, name and extension
-        # condition
-        if any([file_ext == '.png', file_ext == '.jpg', file_ext == '.jpeg']):
-            chek1 = os.path.exists(path_Pictures)  # Confirm the existence of the path
-            if chek1:
-                shutil.move(file, path_Pictures)  # Move the file to the path
-                print('done')
-            else:
-                os.mkdir('2-Pictures')
-                shutil.move(file, path_Pictures)
-                print('done')
-        # condition files word
-        elif any([file_ext == '.docx', file_ext == '.pdf', file_ext == '.xlsx']):
-            chek2 = os.path.exists(path_pdf_doc)
-            if chek2:
-                shutil.move(file, path_pdf_doc)
-                print('done')
-            else:
-                os.mkdir('1-office')
-                shutil.move(file, path_pdf_doc)
-                print('done')
-
-        elif any([file_ext == '.zip', file_ext == '.rar']):
-            chek3 = os.path.exists(path_compressed)
-            if chek3:
-                shutil.move(file, path_compressed)
-                print('done')
-            else:
-                os.mkdir('3-compressed')
-                shutil.move(file, path_compressed)
-                print('done')
-
-        elif any([file_ext == '.mp4', file_ext == '.m4v', file_ext == '.m4v', file_ext == '.mkv']):
-            chek4 = os.path.exists(path_video)
-            if chek4:
-                shutil.move(file, path_video)
-                print('done')
-            else:
-                os.mkdir('4-video')
-                shutil.move(file, path_video)
-                print('done')
-
-        elif any([file_ext == '.exe', file_ext == '.iso']):
-            chek5 = os.path.exists(path_program)
-            if chek5:
-                shutil.move(file, path_program)
-                print('done')
-            else:
-                os.mkdir('5-programs')
-                shutil.move(file, path_program)
-                print('done')
-        else:
-            continue
+def photo():
+    if not os.path.exists("Photo_file"):
+        os.mkdir("Photo_file")
+    shutil.copy(file, "Photo_file")
+    os.remove(file)
 
 
-schedule.every(3).seconds.do(job)
+def doc():
+    if not os.path.exists("Doc_file"):
+        os.mkdir("Doc_file")
+    shutil.copy(file, "Doc_file")
+    os.remove(file)
+
+
+def archive():
+    if not os.path.exists("Archive"):
+        os.mkdir("Archive")
+    shutil.copy(file, "Archive")
+    os.remove(file)
+
+
+def app():
+    if not os.path.exists("App_File"):
+        os.mkdir("App_File")
+    shutil.copy(file, "App_File")
+    os.remove(file)
+
+
+def web_file():
+    if not os.path.exists("Web_File"):
+        os.mkdir("Web_File")
+    shutil.copy(file, "Web_File")
+    os.remove(file)
+
+
+def video():
+    if not os.path.exists("Video_File"):
+        os.mkdir("Video_File")
+    shutil.copy(file, "Video_File")
+    os.remove(file)
+
+
+def check():
+    global file
+    for file in os.listdir(current_dir):
+        if file.endswith(('.mp4', '.m4v', '.m4v', '.mkv')):
+            video()
+        elif file.endswith(('.html', '.htm')):
+            web_file()
+        elif file.endswith(('.exe', '.iso')):
+            app()
+        elif file.endswith(('.zip', '.rar')):
+            archive()
+        elif file.endswith(('.docx', '.pdf', '.xlsx', 'xls', 'doc')):
+            doc()
+
+        elif file.endswith(('.png', '.jpg', '.jpeg', '.gif')):
+            photo()
+    toaster.show_toast("Hello Name", "files have been arranged", duration=5)
+
+
+schedule.every(10).seconds.do(check)
 while True:
     schedule.run_pending()
     time.sleep(1)
 
-# C:/Users/Ahmed/Downloads
